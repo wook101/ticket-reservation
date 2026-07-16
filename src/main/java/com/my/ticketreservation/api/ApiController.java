@@ -7,23 +7,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.concurrent.TimeUnit;
-
 
 @Log4j2
 @RestController
 @RequiredArgsConstructor
-public class RedisController {
+public class ApiController { /** API 서버 **/
 
     private final RedisTemplate<String,String> redisTemplate;
 
+    //대기열 삽입
     @PostMapping("/queue")
     public String queue() {
         String key = "waiting_queue"; //waiting:reserve:1, waiting:reserve:2 예약명으로 나누어 처리가능
-        String userId = "user_" + (int)(Math.random()*100);
+        String userId = "user_" + (int)(Math.random() * 100);
         long timestamp = System.currentTimeMillis();
         addAndExpire(key, userId, timestamp, 30);
-
         return "push in queue";
     }
 
@@ -37,12 +35,18 @@ public class RedisController {
         //redisTemplate.expire(key, seconds, TimeUnit.SECONDS);
     }
 
-    @GetMapping("/queue/status")
-    public void queueStatus() {
+    //폴링 중..
+    @GetMapping("/queue/status/{user}")
+    public String queueStatus() {
+        //현재 입장 순번, 내 뒤 대기인원 응답
+
+        return "152";
     }
 
     @GetMapping("/active/check")
     public void activeCheck(){
+
     }
+
 
 }
